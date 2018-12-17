@@ -8,7 +8,6 @@ MQTTBROKER = 'iot.eclipse.org'
 PORT = 1883
 client = mqtt.Client()
 client.connect(MQTTBROKER,PORT)
-client.on_connect = on_connect
 #GPIO ports(Replace as needed)
 Port_list = [1,2,3,4]
  
@@ -24,14 +23,15 @@ def on_message(client, userdata, msg):
     print(MQTTBROKER + ': <' +msg.topic + "> : " + str(msg.payload.decode()))
     if(msg.payload.decode().equals("Done1")):
         i = 0
-        while i <= len(Port_list):
-            client.publish("sensor/light","Sensor %s output %s"%(Port_list[i]),str(random.randint(0,1)))
+        while i < len(Port_list):
+            client.publish("sensor/light","Sensor %s output %s"%(str(Port_list[i]),str(random.randint(0,1))))
             i += 1
         client.publish("pi/notify","Done")
 #Initial boot loop
+client.on_connect = on_connect
 i = 0
-while i <= len(Port_list):
-    client.publish("sensor/light","Sensor %s output %s"%(Port_list[i]),str(random.randint(0,1))));
+while i < len(Port_list):
+    client.publish("sensor/light","Sensor %s output %s"%(str(Port_list[i]),str(random.randint(0,1))))
     i += 1;
     sleep(1)
 client.publish("pi/notify","Done")
