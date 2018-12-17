@@ -1,0 +1,13 @@
+import paho.mqtt.client as mqtt
+import urllib
+import RPi.GPIO as GPIO
+from time import sleep
+## Set up connection / define server
+MQTTBROKER = 'iot.eclipse.org'
+PORT = 1883
+client = mqtt.Client()
+client.connect(MQTTBROKER,PORT)
+
+while True:
+    client.publish("lib/pingmaster","Hello there")
+    sleep(1)
