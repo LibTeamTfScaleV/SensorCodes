@@ -5,7 +5,13 @@ import subprocess
 from time import sleep
 from urllib2 import urlopen
 
-#GPIO/List initiation (Add automatic detection in the future)
+#api keys (input them here)
+
+temp = "XPB01DLFHR8LJL3Z"
+chair = "MQR4M4D6TYMUB47S"
+sound = "Z0KWDBDNX3X04RON"
+
+#GPIO/List initiation 
 channel = 5
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(channel, GPIO.IN)
@@ -67,15 +73,15 @@ print("New CONFIG:", val)
 def Main_program():
     while True:
         temperature = read_temp()
-        temp1 = urlopen("https://api.thingspeak.com/update?api_key=XPB01DLFHR8LJL3Z&field2="+ str(temperature))
+        temp1 = urlopen("https://api.thingspeak.com/update?api_key=%s&field2=%s" %(str(temp),str(temperature)))
 # Sound sensor
-        data = urlopen("https://api.thingspeak.com/update?api_key=Z0KWDBDNX3X04RON&field2=" + str(GPIO.input(channel)));  
+        sound = urlopen("https://api.thingspeak.com/update?api_key=%s&field2=%s"%(str(sound),str(GPIO.input(channel))));  
 # Light sensor array
-        Chair = urlopen("https://api.thingspeak.com/update?api_key=MQR4M4D6TYMUB47S&field1=%s&field2=%s&field3=%s&field4=%s"%(str(GPIO.input(light_list[0])),str(GPIO.input(light_list[1])),str(GPIO.input(light_list[2])),str(GPIO.input(light_list[3]))))
+        Chair = urlopen("https://api.thingspeak.com/update?api_key=%s&field1=%s&field2=%s&field3=%s&field4=%s"%(str(chair),str(GPIO.input(light_list[0])),str(GPIO.input(light_list[1])),str(GPIO.input(light_list[2])),str(GPIO.input(light_list[3]))))
 #Output / response code
         print("\n| Chair %s : %s | Chair %s : %s | Chair %s : %s | Chair %s : %s |\n| Temprature : %s C | Noise level : %s |\n" % (str(chair_list[0]),"Available" if GPIO.input(light_list[0]) == 0 else "Occupied", str(chair_list[1]),"Available" if GPIO.input(light_list[1]) == 0 else "Occupied", str(chair_list[2]),"Available" if GPIO.input(light_list[2]) == 0 else "Occupied", str(chair_list[3]),"Available" if GPIO.input(light_list[3]) == 0 else "Occupied",str(temperature),"Too Noisy" if GPIO.input(channel) == 1 else "Acceptable"))
         print("[Temperature Response code] : "+ str(temp1))
-        print("[Sound Response code] : "+ str(data))
+        print("[Sound Response code] : "+ str(sound))
         print("[Chair Response code] : "+ str(Chair))
         sleep(1)
 
