@@ -7,7 +7,7 @@ from urllib2 import urlopen
 
 #api key (input here)
 
-api_key= "I5RFRUADNB7NS5W0"
+api_key= #Replace with api key
 
 #GPIO/List initiation
 channel = 5
